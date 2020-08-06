@@ -64,6 +64,7 @@ ax.set_ylabel("Normalized Spectral Luminosity")
 cb = pl.colorbar(mappable=lines)
 cb.set_alpha(1)
 cb.draw_all()
+cb.set_label('Effective Temperature [K]')
 
 pl.savefig("model_stellar_spectra.png", bbox_inches='tight')
 pl.savefig("model_stellar_spectra.pdf", bbox_inches='tight')
