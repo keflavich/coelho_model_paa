@@ -35,10 +35,20 @@ def lacc(mdot, rstar=u.R_sun, mstar=u.M_sun):
     return (mdot / 1.25 * constants.G * mstar / rstar).to(u.L_sun)
 
 def log_pab(lacc):
+    # log L_acc = a log L_pab + b
+    # a = 1.06
+    # b = 2.76
+    # log_pab = (log L_acc - b) / a
     return 1/1.06 * np.log10(lacc/u.L_sun) - 2.76/1.06
 
 def log_paa(lacc):
-    return log_pab(lacc) + np.log10(2.86 * 0.336 / 0.347)
+    # L_paa = L_pab * (L_Hb/L_pab) * (L_paa/L_hb)
+    # L_Hb / L_pab = (L_hgamma / L_pab) * (L_hbeta/L_Hgamma) = (1/0.347) * (1/0.469)
+    # L_paa / L_hb = 0.336
+    # L_paa = L_pab * 0.336 / (0.347 * 0.469)
+    # L_paa = 2.06 * L_pab
+    # log L_paa = log 2.06 + log Pab
+    return log_pab(lacc) + np.log10(0.336/(0.347*0.469))
 
 def L_paa(lacc):
     return 10**log_paa(lacc) * u.L_sun
@@ -115,10 +125,10 @@ if not os.path.exists(tblfn):
     tbl.add_column(col=-2.5*(np.log10(tbl['paac_l'])), name='mag_paac_l')
     tbl.add_column(col=-2.5*(np.log10(tbl['paac_h'])), name='mag_paac_h')
     tbl.add_column(col=tbl['mag_paac_h']-tbl['mag_paac_l'], name='paach-paacl')
-    tbl.add_column(col=tbl['mag_paa'] - np.log10(tbl['paac_h'])), name='mag_paa-h')
-    tbl.add_column(col=tbl['mag_paa'] - np.log10(tbl['paac_l'])), name='mag_paa-l')
-    tbl.add_column(col=tbl['mag_paa'] - np.log10(tbl['K'])), name='mag_paa-K')
-    tbl.add_column(col=tbl['mag_paa'] - np.log10(tbl['H'])), name='mag_paa-H')
+    tbl.add_column(col=tbl['mag_paa'] - np.log10(tbl['paac_h']), name='mag_paa-h')
+    tbl.add_column(col=tbl['mag_paa'] - np.log10(tbl['paac_l']), name='mag_paa-l')
+    tbl.add_column(col=tbl['mag_paa'] - np.log10(tbl['K']), name='mag_paa-K')
+    tbl.add_column(col=tbl['mag_paa'] - np.log10(tbl['H']), name='mag_paa-H')
     tbl.add_column(col=tbl['m3.6'] - tbl['mag_paa'], name='3.6-paa')
     tbl.add_column(col=tbl['m8.0'] - tbl['mag_paa'], name='8.0-paa')
     tbl.add_column(col=tbl['m4.5'] - tbl['mag_paa'], name='4.5-paa')
