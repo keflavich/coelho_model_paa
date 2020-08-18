@@ -59,7 +59,7 @@ ax.plot(newx, np.array([transmission_curve_lower, transmission_curve_paa, transm
 
 ax.set_xlim(18500, 19000)
 ax.set_ylim(0.9, 1.1)
-ax.set_xlabel("Wavelength [$\\circ{A}$]")
+ax.set_xlabel("Wavelength [$\\AA$]")
 ax.set_ylabel("Normalized Spectral Luminosity")
 cb = pl.colorbar(mappable=lines)
 cb.set_alpha(1)
